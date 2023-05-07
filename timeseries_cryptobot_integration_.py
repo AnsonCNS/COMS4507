@@ -69,6 +69,7 @@ class BitcoinTransaction:
         self.transaction_id = uuid.uuid4()
 
     def __str__(self):
+        return f'Transaction ID: {self.transaction_id}, Transaction Type: {self.transaction_type}, Price: {self.price}, Amount: {self.amount} BTC, Volume: {self.volume}, Profit/Loss: {self.profit_or_loss}, Transaction Trigger: {self.transaction_trigger}'
 
     def __repr__(self):
         return f"({str(self)})"
