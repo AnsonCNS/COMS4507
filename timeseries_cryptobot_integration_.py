@@ -69,7 +69,6 @@ class BitcoinTransaction:
         self.transaction_id = uuid.uuid4()
 
     def __str__(self):
-        return f'Transaction ID: {self.transaction_id}, Transaction Type: {self.transaction_type}, Amount: {self.amount} BTC, Volume: {self.volume}'
 
     def __repr__(self):
         return f"({str(self)})"
@@ -126,17 +125,6 @@ def take_decision(current_price, predicted_price, balance, buy_order, sell_order
                 TransactionTypes.SELL, current_price, amount, volume, profit_or_loss, trigger)
             print("New sell order placed:", sell_order)
             balance += amount
-        # Check if predicted future price will fall below stoploss of current price, prevent possible loss
-        elif predicted_price <= current_price * (1 - STOP_LOSS_PERCENTAGE):
-            volume = buy_order.volume
-            amount = current_price * volume
-            # calculate the profit/loss incurred in this sell order
-            profit_or_loss = volume * (current_price - buy_order.price)
-            trigger = "Predicted future price triggered stoploss"
-            sell_order = BitcoinTransaction(
-                TransactionTypes.SELL, current_price, amount, volume, profit_or_loss, trigger)
-            print("New sell order placed:", sell_order)
-            balance += amount
         # Check if investment goal has been reached
         elif balance + (current_price * buy_order.volume) >= GOAL:
             volume = buy_order.volume
@@ -144,6 +132,17 @@ def take_decision(current_price, predicted_price, balance, buy_order, sell_order
             # calculate the profit/loss incurred in this sell order
             profit_or_loss = volume * (current_price - buy_order.price)
             trigger = "Investment goal reached"
+            sell_order = BitcoinTransaction(
+                TransactionTypes.SELL, current_price, amount, volume, profit_or_loss, trigger)
+            print("New sell order placed:", sell_order)
+            balance += amount
+        # Check if predicted future price will fall below stoploss of current price, prevent possible loss
+        elif predicted_price <= current_price * (1 - STOP_LOSS_PERCENTAGE):
+            volume = buy_order.volume
+            amount = current_price * volume
+            # calculate the profit/loss incurred in this sell order
+            profit_or_loss = volume * (current_price - buy_order.price)
+            trigger = "Predicted future price triggered stoploss"
             sell_order = BitcoinTransaction(
                 TransactionTypes.SELL, current_price, amount, volume, profit_or_loss, trigger)
             print("New sell order placed:", sell_order)
@@ -226,4 +225,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
