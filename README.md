@@ -1,1 +1,1 @@
-# COMS4507
+# COMS4507 Project - Cryptocurrency trading bot
