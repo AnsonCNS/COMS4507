@@ -417,7 +417,7 @@ def main():
     profit_and_loss_record = []
 
     # FIXME the line below is for experimental demonstration, remove line to get real prices
-    price = get_price()
+    current_price = get_price()
 
     # keep running the bot if there is positive balance or an existing buy order has been placed.
     while (balance > 0 or buy_order) and not goal_reached:
@@ -426,8 +426,11 @@ def main():
         # current_price = get_price()
 
         # FIXME
-        # the following line is for experimental demonstration, remove line to get real prices
-        current_price = random.randint(int(price * (1 - 0.4)), int(price))
+        # the following lines are for experimental demonstration, remove lines to get real prices
+        if not buy_order:
+          current_price = random.randint(int(current_price * (1 - 0.4)), int(current_price))
+        else:
+          current_price = random.randint(int(current_price * (1 - 0.1)), int(current_price * (1 + 0.1)))
 
         if current_price is not None:
             print("Current price of BTC: $", current_price)
